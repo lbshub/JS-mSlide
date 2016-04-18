@@ -38,13 +38,8 @@
  * this.next 滑动切换下一项方法
  * ===================================================
 **/
-function bind(context, name) {
-	return function() {
-		return context[name].apply(context, arguments);
-	};
-}
 
-(function(window, document) {
+;(function(window, document) {
 	'use strict';
 
 	var mSlide = function(opts) {

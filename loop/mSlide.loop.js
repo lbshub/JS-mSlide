@@ -38,7 +38,7 @@
  * ===================================================
 **/
 
-(function(window, document) {
+;(function(window, document) {
 	'use strict';
 
 	var mSlide = function(opts) {
@@ -70,6 +70,7 @@
 		this.prevented = !!opts.prevented || false;
 
 		this.support3d = this._support3d();
+		this.touch = {};
 
 		this.start = opts.start || function() {};
 		this.move = opts.move || function() {};
@@ -132,15 +133,15 @@
 		},
 		_bind: function() {
 			var _this = this;
-			this._on(this.wrapper, ['touchstart', 'pointerdown', 'MSPointerDown'], function(e) {
+			this._on(this.wrapper, ['touchstart', 'pointerdown', 'MSPointerDown', 'mousedown'], function(e) {
 				_this._touchStart(e);
 				_this.auto && _this._stop();
 			});
-			this._on(this.wrapper, ['touchmove', 'pointermove', 'MSPointerMove'], function(e) {
+			this._on(this.wrapper, ['touchmove', 'pointermove', 'MSPointerMove', 'mousemove'], function(e) {
 				_this._touchMove(e);
 				_this.auto && _this._stop();
 			});
-			this._on(this.wrapper, ['touchend', 'touchcancel', 'pointerup', 'pointercancel', 'MSPointerUp', 'MSPointerCancel'], function(e) {
+			this._on(this.wrapper, ['touchend', 'touchcancel', 'pointerup', 'pointercancel', 'MSPointerUp', 'MSPointerCancel', 'mouseup'], function(e) {
 				_this._touchEnd(e);
 				_this.auto && _this._play();
 			});
@@ -151,15 +152,16 @@
 		},
 		_touchStart: function(e) {
 			var point = e.touches ? e.touches[0] : e;
-			!this.touch && (this.touch = {});
 			this.touch.x = point.pageX;
 			this.touch.y = point.pageY;
 			this.touch.disX = 0;
 			this.touch.disY = 0;
 			this.touch.fixed = '';
+			this.touch.move = true;
 			this.start && this.start();
 		},
 		_touchMove: function(e) {
+			if (!this.touch.move) return e.preventDefault();
 			if (this.animated) return e.preventDefault();
 			var point = e.touches ? e.touches[0] : e;
 			this.touch.disX = point.pageX - this.touch.x;
@@ -199,6 +201,7 @@
 			this.move && this.move();
 		},
 		_touchEnd: function(e) {
+			this.touch.move = false;
 			if (this.index === this.oIndex) return;
 			if (this.direction === 'left' && this.touch.fixed === 'left') {
 				this._end(this.touch.disX);
@@ -246,7 +249,7 @@
 				_this._reset();
 			}, this.duration);
 		},
-		_animate: function(){
+		_animate: function() {
 			this._setTransition(this.index, this.duration);
 			this._setTransition(this.oIndex, this.duration);
 			this._setTransform(this.index, 0);
