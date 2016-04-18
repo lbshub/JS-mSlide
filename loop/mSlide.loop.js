@@ -1,6 +1,6 @@
 /**
  * LBS mSlide 循环版 绝对定位方式
- * Date: 2014-11-12
+ * Date: 2015-04-16
  * ===================================================
  * opts.el 外围包裹容器/滑动事件对象(wrapper)(一个字符串的CSS选择器或者元素对象)
  * opts.direction 滚动方向 默认left (左右left 上下top)
@@ -132,23 +132,49 @@
 			}
 		},
 		_bind: function() {
-			var _this = this;
-			this._on(this.wrapper, ['touchstart', 'pointerdown', 'MSPointerDown', 'mousedown'], function(e) {
-				_this._touchStart(e);
-				_this.auto && _this._stop();
-			});
-			this._on(this.wrapper, ['touchmove', 'pointermove', 'MSPointerMove', 'mousemove'], function(e) {
-				_this._touchMove(e);
-				_this.auto && _this._stop();
-			});
-			this._on(this.wrapper, ['touchend', 'touchcancel', 'pointerup', 'pointercancel', 'MSPointerUp', 'MSPointerCancel', 'mouseup'], function(e) {
-				_this._touchEnd(e);
-				_this.auto && _this._play();
-			});
+			var _events = {
+					hasTouch: 'ontouchstart' in window,
+					hasPointer: window.PointerEvent || window.MSPointerEvent
+				},
+				_this = this;
+			if (_events.hasTouch) {
+				this._events(['touchstart'], ['touchmove'], ['touchend', 'touchcancel']);
+			} else if (_events.hasPointer) {
+				this._events(['pointerdown', 'MSPointerDown'], ['pointermove', 'MSPointerMove'], ['pointerup', 'pointercancel', 'MSPointerUp', 'MSPointerCancel']);
+			} else {
+				this._events(['mousedown'], ['mousemove'], ['mouseup']);
+			}
+			// this._on(this.wrapper, ['touchstart', 'pointerdown', 'MSPointerDown', 'mousedown'], function(e) {
+			// 	_this._touchStart(e);
+			// 	_this.auto && _this._stop();
+			// });
+			// this._on(this.wrapper, ['touchmove', 'pointermove', 'MSPointerMove', 'mousemove'], function(e) {
+			// 	_this._touchMove(e);
+			// 	_this.auto && _this._stop();
+			// });
+			// this._on(this.wrapper, ['touchend', 'touchcancel', 'pointerup', 'pointercancel', 'MSPointerUp', 'MSPointerCancel', 'mouseup'], function(e) {
+			// 	_this._touchEnd(e);
+			// 	_this.auto && _this._play();
+			// });
 			this._on(window, ['resize', 'orientationchange'], function(e) {
 				_this._resize();
 			});
 			this.auto && this._play();
+		},
+		_events: function(start, move, end) {
+			var _this = this;
+			this._on(this.wrapper, start, function(e) {
+				_this._touchStart(e);
+				_this.auto && _this._stop();
+			});
+			this._on(this.wrapper, move, function(e) {
+				_this._touchMove(e);
+				_this.auto && _this._stop();
+			});
+			this._on(this.wrapper, end, function(e) {
+				_this._touchEnd(e);
+				_this.auto && _this._play();
+			});
 		},
 		_touchStart: function(e) {
 			var point = e.touches ? e.touches[0] : e;
