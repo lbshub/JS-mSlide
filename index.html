@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+	<title>mSlide使用实例</title>
+	<style type="text/css">
+		*{margin: 0; padding: 0;}
+		ul, li{list-style: none;}
+		html, body{height: 100%;}
+		.pages-wrapper{position: relative; width: 100%; height: 100%; -webkit-backface-visibility: hidden;}
+		.pages-scroller{width: 100%; height: 100%;}
+
+		.page{width: 100%; height: 100%; background: #f0f; text-align: center; font-size: 100px; color: #fff;}
+		.page:nth-child(1){background: #f0f;}
+		.page:nth-child(2){background: #000;}
+		.page:nth-child(3){background: #f00;}
+		
+		/* 锚点/导航指示 上下方向 JS判断marginTop的值*/
+		.pages-nav{position: fixed; top: 50%; right: 5px; z-index: 888; }
+		.pages-nav li{overflow: hidden; margin-bottom: 5px; width: 8px; height: 8px; border-radius:8px; background: #E3CCD1; font-size: 0; line-height: 0;}
+		.pages-nav li.current{background: #FF645F;}
+
+		.page-wrapper{height: 200px; width: 80%; margin: 0 auto; overflow: hidden;}
+		.page-scroller{height: 100%;}
+		.page-scroller li{width: 100%; height: 100%;}
+		.page-scroller li:nth-child(1){background: green;}
+		.page-scroller li:nth-child(2){background: blue;}
+		.page-scroller li:nth-child(3){background: red;}
+		.page-nav{position: absolute; left: 0; bottom:5px; z-index: 888; width: 100%; height: 3px; text-align: center; }
+		.page-nav li{display: inline-block; overflow: hidden; margin:0 3px; width: 5px; height: 3px; vertical-align: top; background:rgba(255,255,255,.6); font-size: 0; line-height: 0; -webkit-transition: all 0.3s; transition: all 0.3s;}
+		.page-nav li.current{width: 10px;}
+
+	</style>
+</head>
+<body>
+
+	<div class="pages-wrapper" id="pages-wrapper">
+		<div class="pages-scroller">
+			
+			<section class="page">1</section>
+			<section class="page">
+				<div class="page-wrapper" id="page-wrapper">
+					<ul class="page-scroller">
+						<li>2-1</li>
+						<li>2-2</li>
+						<li>2-3</li>
+					</ul>
+				</div>
+			</section>
+			<section class="page">3</section>
+		
+		</div>
+	</div>
+	
+	<script type="text/javascript" src="mSlide.min.js"></script>
+	<script type="text/javascript">
+		// left left
+		// var slide1 = new mSlide({
+		// 	el: '#pages-wrapper',
+		// 	// navShow: true,
+		// 	// navClass: 'pages-nav',
+		// 	direction: 'left',
+		// 	locked: true,
+		// 	fullScreen: true,
+		// 	canceled: true,
+		// 	prevented: true
+		// });
+		// var slide2 = new mSlide({
+		// 	el: '#page-wrapper',
+		// 	// navShow: true,
+		// 	// navClass: 'page-nav',
+		// 	direction: 'left',
+		// 	locked: true,
+		// 	canceled: true,
+		// 	prevented: true,
+		// 	end: function() {
+		// 		// left left
+		// 		if (slide2.oIndex == 0 && slide2.touch.disX > 10) slide1.prev();
+		// 		if (slide2.oIndex == slide2.length - 1 && slide2.touch.disX < -10) slide1.next();
+		// 		// console.log(slide2.touch.disX)
+		// 	}
+		// });
+
+		// =============================================
+		// top top
+		// var slide1 = new mSlide({
+		// 	el: '#pages-wrapper',
+		// 	// navShow: true,
+		// 	// navClass: 'pages-nav',
+		// 	direction: 'top',
+		// 	locked: true,
+		// 	fullScreen: true,
+		// 	canceled: true
+		// });
+		// var slide2 = new mSlide({
+		// 	el: '#page-wrapper',
+		// 	// navShow: true,
+		// 	// navClass: 'page-nav',
+		// 	direction: 'top',
+		// 	locked: true,
+		// 	canceled: true,
+		// 	end: function() {
+		// 		// top top
+		// 		if(slide2.oIndex == 0 && slide2.touch.disY > 10) slide1.prev();
+		// 		if(slide2.oIndex == slide2.length - 1 && slide2.touch.disY < -10 ) slide1.next();
+		// 		// console.log(slide2.touch.disY)
+		// 	}
+		// });
+		
+		// =============================================
+		// left top
+		// var slide1 = new mSlide({
+		// 	el: '#pages-wrapper',
+		// 	// navShow: true,
+		// 	// navClass: 'pages-nav',
+		// 	direction: 'left',
+		// 	locked: true,
+		// 	fullScreen: true,
+		// 	canceled: true,
+		// 	prevented: true
+		// });
+		// var slide2 = new mSlide({
+		// 	el: '#page-wrapper',
+		// 	// navShow: true,
+		// 	// navClass: 'page-nav',
+		// 	direction: 'top',
+		// 	locked: true,
+		// 	// canceled: true,
+		// 	end: function() {
+		// 	}
+		// });
+
+		// =============================================
+		// top left
+		var slide1 = new mSlide({
+			el: '#pages-wrapper',
+			navShow: true,
+			navClass: 'pages-nav',
+			direction: 'top',
+			locked: true,
+			fullScreen: true,
+			canceled: true
+			// auto: true
+			// delay: 4000
+		});
+		var slide2 = new mSlide({
+			el: '#page-wrapper',
+			navShow: true,
+			navClass: 'page-nav',
+			direction: 'left',
+			locked: true,
+			prevented: true, 
+			// canceled: true,
+			// auto: true,
+			after: function() {
+				// console.log(slide2.index)
+			}
+		});
+
+		// =============================================
+		// none left
+		// var slide2 = new mSlide({
+		// 	el: '#page-wrapper',
+		// 	// navShow: true,
+		// 	// navClass: 'page-nav',
+		// 	direction: 'left',
+		// 	locked: true,
+		// 	// prevented: true, 
+		// 	canceled: true,
+		// 	end: function() {
+		// 	}
+		// });
+
+		// =============================================
+		// none top
+		// var slide2 = new mSlide({
+		// 	el: '#page-wrapper',
+		// 	// navShow: true,
+		// 	// navClass: 'page-nav',
+		// 	direction: 'top',
+		// 	locked: true,
+		// 	// prevented: true, 
+		// 	canceled: true,
+		// 	end: function() {
+		// 	}
+		// });
+	</script>
+
+</body>
+</html>

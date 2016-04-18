@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+	<title>mSlide使用实例</title>
+	<style type="text/css">
+		*{margin: 0; padding: 0;}
+		ul, li{list-style: none;}
+		html, body{height: 100%;}
+		.pages-wrapper{position: relative; width: 100%; height: 100%;}
+
+		.page{width: 100%; height: 100%; background: #f0f; text-align: center; font-size: 100px; color: #fff;}
+		.page:nth-child(1){background: #f0f;}
+		.page:nth-child(2){background: #000;}
+		.page:nth-child(3){background: #f00;}
+		
+		/* 锚点/导航指示 上下方向 JS判断marginTop的值*/
+		.pages-nav{position: absolute; top: 50%; right: 5px; z-index: 888; }
+		.pages-nav li{overflow: hidden; margin-bottom: 5px; width: 8px; height: 8px; border-radius:8px; background: #ccc; font-size: 0; line-height: 0;}
+		.pages-nav li.current{background: #fff;}
+
+		.pages-next{position: fixed; left: 50%; bottom: 100px; margin-left: -50px; width: 100px; height: 30px; background: rgba(255,255,255,.3);}
+
+		.page-wrapper{height: 200px; width: 80%; margin: 0 auto; overflow: hidden;}
+		.page-wrapper section{width: 100%; height: 100%;}
+		.page-wrapper section:nth-child(1){background: green;}
+		.page-wrapper section:nth-child(2){background: blue;}
+		.page-wrapper section:nth-child(3){background: red;}
+		.page-nav{position: absolute; left: 0; bottom:5px; z-index: 888; width: 100%; height: 3px; text-align: center; }
+		.page-nav li{display: inline-block; overflow: hidden; margin:0 3px; width: 5px; height: 3px; vertical-align: top; background:rgba(255,255,255,.6); font-size: 0; line-height: 0; -webkit-transition: all 0.3s; transition: all 0.3s;}
+		.page-nav li.current{width: 10px;}
+
+	</style>
+</head>
+<body>
+
+	<div class="pages-wrapper" id="pages-wrapper">
+		<section class="page">1</section>
+		<section class="page">
+			<div class="page-wrapper" id="page-wrapper">
+				<section>2-1</section>
+				<section>2-2</section>
+				<section>2-3</section>
+			</div>		
+		</section>
+		<section class="page">3</section>
+	</div>
+	<!-- <div class="pages-next"></div> -->
+	
+	<script type="text/javascript" src="mSlide.loop.min.js"></script>
+	<script type="text/javascript">
+		var slide = new mSlide({
+			el: '#pages-wrapper',
+			direction: 'top',
+			navShow: true,
+			navClass: 'pages-nav'
+		});
+		var slide2 = new mSlide({
+			el: '#page-wrapper',
+			direction: 'left',
+			// locked: true,
+			navShow: true,
+			navClass: 'page-nav'
+		});
+
+	</script>
+
+</body>
+</html>
